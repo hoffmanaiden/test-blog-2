@@ -1,0 +1,22 @@
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  Posts: [Post] @hasMany(indexName: "byUser", fields: ["id"])
+  Comments: [Comment] @hasMany(indexName: "byUser", fields: ["id"])
+}
+
+type Comment @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  text: String
+  userID: ID! @index(name: "byUser")
+  postID: ID! @index(name: "byPost")
+}
+
+type Post @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  text: String!
+  image: String
+  userID: ID! @index(name: "byUser")
+  Comments: [Comment] @hasMany(indexName: "byPost", fields: ["id"])
+}
+ 
